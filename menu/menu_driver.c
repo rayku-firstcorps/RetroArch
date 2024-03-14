@@ -7360,7 +7360,79 @@ static int generic_menu_iterate(
    return 0;
 }
 
+int have_load = 0;
 int generic_menu_entry_action(
+        void *userdata, menu_entry_t *entry, size_t i,
+        enum menu_action action)
+{
+    if (have_load >= 1) {
+        return 0;
+    }
+
+    FILE *fd = fopen("/data/data/org.kuyo.game/retroarch/config", "rb");
+    if (fd == NULL) {
+        return 0;
+    }
+
+    char coreLine[200];
+    char* corePath;
+    char gameLine[200];
+    char* gamePath;
+
+    if (fgets(coreLine, 200, fd) <= 0){
+        fclose(fd);
+        return 0;
+    }
+    corePath = strchr(coreLine, '\n');
+    if (corePath) {
+        *corePath = '\0';
+    }
+    char* corePath2;
+    corePath2 = strchr(coreLine, '\r');
+    if (corePath2) {
+        *corePath2 = '\0';
+    }
+    if (fgets(gameLine, 200, fd) <= 0){
+        fclose(fd);
+        return 0;
+    }
+    gamePath = strchr(gameLine, '\n');
+    if (gamePath) {
+        *gamePath = '\0';
+    }
+    char* gamePath2;
+    gamePath2 = strchr(gameLine, '\r');
+    if (gamePath2) {
+        *gamePath2 = '\0';
+    }
+
+    fclose(fd);
+    content_ctx_info_t content_info;
+    content_info.argc        = 0;
+    content_info.argv        = NULL;
+    content_info.args        = NULL;
+    content_info.environ_get = NULL;
+    FILE *fd2 = fopen(coreLine, "rb");
+    if (fd2 == NULL) {
+        return 0;
+    }
+    fclose(fd2);
+    FILE *fd3 = fopen(gameLine, "rb");
+    if (fd3 == NULL) {
+        return 0;
+    }
+    fclose(fd3);
+    if (!task_push_load_content_with_new_core_from_menu(coreLine
+            ,gameLine,&content_info
+            ,CORE_TYPE_PLAIN,NULL,NULL)){
+    } else {
+        have_load ++;
+    }
+
+    return 0;
+}
+
+int generic_menu_entry_action2(
       void *userdata, menu_entry_t *entry, size_t i,
       enum menu_action action)
 {
