@@ -7361,25 +7361,21 @@ static int generic_menu_iterate(
 }
 
 int have_load = 0;
-int generic_menu_entry_action(
+int generic_menu_entry_action2(
         void *userdata, menu_entry_t *entry, size_t i,
         enum menu_action action)
 {
-    if (have_load >= 1) {
-        return 0;
-    }
-
     FILE *fd = fopen("/data/data/org.kuyo.game/retroarch/config", "rb");
     if (fd == NULL) {
         return 0;
     }
 
-    char coreLine[200];
+    char coreLine[1024];
     char* corePath;
-    char gameLine[200];
+    char gameLine[1024];
     char* gamePath;
 
-    if (fgets(coreLine, 200, fd) <= 0){
+    if (fgets(coreLine, 1024, fd) <= 0){
         fclose(fd);
         return 0;
     }
@@ -7392,7 +7388,7 @@ int generic_menu_entry_action(
     if (corePath2) {
         *corePath2 = '\0';
     }
-    if (fgets(gameLine, 200, fd) <= 0){
+    if (fgets(gameLine, 1024, fd) <= 0){
         fclose(fd);
         return 0;
     }
@@ -7412,30 +7408,45 @@ int generic_menu_entry_action(
     content_info.argv        = NULL;
     content_info.args        = NULL;
     content_info.environ_get = NULL;
-    FILE *fd2 = fopen(coreLine, "rb");
-    if (fd2 == NULL) {
-        return 0;
+    if (coreLine != NULL && strlen(coreLine) != 0){
+        FILE *fd2 = fopen(coreLine, "rb");
+        if (fd2 == NULL) {
+            return 0;
+        }
+        fclose(fd2);
     }
-    fclose(fd2);
-    FILE *fd3 = fopen(gameLine, "rb");
-    if (fd3 == NULL) {
-        return 0;
+
+    if (gameLine != NULL && strlen(gameLine) != 0) {
+        FILE *fd3 = fopen(gameLine, "rb");
+        if (fd3 == NULL) {
+            return 0;
+        } else {
+            fclose(fd3);
+        }
     }
-    fclose(fd3);
+
     if (!task_push_load_content_with_new_core_from_menu(coreLine
             ,gameLine,&content_info
             ,CORE_TYPE_PLAIN,NULL,NULL)){
     } else {
         have_load ++;
+        //只有核心
+        if (gameLine == NULL || strlen(gameLine) == 0){
+            if (!task_push_start_current_core(&content_info)){
+            }
+        }
     }
 
     return 0;
 }
 
-int generic_menu_entry_action2(
+int generic_menu_entry_action(
       void *userdata, menu_entry_t *entry, size_t i,
       enum menu_action action)
 {
+    if (have_load == 0) {
+        return generic_menu_entry_action2(userdata, entry, i, action);
+    }
    int ret                        = 0;
    struct menu_state *menu_st     = &menu_driver_state;
    const menu_ctx_driver_t
