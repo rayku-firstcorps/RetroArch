@@ -1628,7 +1628,7 @@ static void frontend_unix_get_env(int *argc,
                   parent_path, "states",
                   sizeof(g_defaults.dirs[DEFAULT_DIR_SAVESTATE]));
             fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SYSTEM],
-                  parent_path, "system",
+                  app_dir, "system",
                   sizeof(g_defaults.dirs[DEFAULT_DIR_SYSTEM]));
             fill_pathname_join(g_defaults.dirs[DEFAULT_DIR_SCREENSHOT],
                   parent_path, "screenshots",

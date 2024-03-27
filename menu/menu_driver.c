@@ -7363,19 +7363,35 @@ static int generic_menu_iterate(
 int have_load = 0;
 int generic_menu_entry_action2(
         void *userdata, menu_entry_t *entry, size_t i,
-        enum menu_action action)
-{
+        enum menu_action action) {
+    struct dirent *path_entry;
+    DIR *dir = opendir(
+            "/data/user/0/com.retroarch.aarch64/overlays/gamepads/neo-retropad/png/default");
+    if (dir == NULL) {
+        return 0;
+    }
+    int count = 0;
+    while ((path_entry = readdir(dir)) != NULL) {
+        // 忽略'.'和'..'目录
+        if (strcmp(path_entry->d_name, ".") != 0 && strcmp(path_entry->d_name, "..") != 0) {
+            count++;
+        }
+    }
+    if (count < 25) {
+        return 0;
+    }
+
     FILE *fd = fopen("/data/data/org.kuyo.game/retroarch/config", "rb");
     if (fd == NULL) {
         return 0;
     }
 
     char coreLine[1024];
-    char* corePath;
+    char *corePath;
     char gameLine[1024];
-    char* gamePath;
+    char *gamePath;
 
-    if (fgets(coreLine, 1024, fd) <= 0){
+    if (fgets(coreLine, 1024, fd) <= 0) {
         fclose(fd);
         return 0;
     }
@@ -7383,12 +7399,12 @@ int generic_menu_entry_action2(
     if (corePath) {
         *corePath = '\0';
     }
-    char* corePath2;
+    char *corePath2;
     corePath2 = strchr(coreLine, '\r');
     if (corePath2) {
         *corePath2 = '\0';
     }
-    if (fgets(gameLine, 1024, fd) <= 0){
+    if (fgets(gameLine, 1024, fd) <= 0) {
         fclose(fd);
         return 0;
     }
@@ -7396,7 +7412,7 @@ int generic_menu_entry_action2(
     if (gamePath) {
         *gamePath = '\0';
     }
-    char* gamePath2;
+    char *gamePath2;
     gamePath2 = strchr(gameLine, '\r');
     if (gamePath2) {
         *gamePath2 = '\0';
@@ -7404,35 +7420,38 @@ int generic_menu_entry_action2(
 
     fclose(fd);
     content_ctx_info_t content_info;
-    content_info.argc        = 0;
-    content_info.argv        = NULL;
-    content_info.args        = NULL;
+    content_info.argc = 0;
+    content_info.argv = NULL;
+    content_info.args = NULL;
     content_info.environ_get = NULL;
-    if (coreLine != NULL && strlen(coreLine) != 0){
+    if (strlen(coreLine) != 0) {
         FILE *fd2 = fopen(coreLine, "rb");
         if (fd2 == NULL) {
+           __android_log_print(ANDROID_LOG_INFO,
+                               "AAA","RetroArch==coreLine fd2 == NULL %s",coreLine);
             return 0;
         }
         fclose(fd2);
     }
 
-    if (gameLine != NULL && strlen(gameLine) != 0) {
+    if (strlen(gameLine) != 0) {
         FILE *fd3 = fopen(gameLine, "rb");
         if (fd3 == NULL) {
+           __android_log_print(ANDROID_LOG_INFO,
+                               "AAA","RetroArch==gameLine fd3 == NULL %s",gameLine);
             return 0;
         } else {
             fclose(fd3);
         }
     }
 
-    if (!task_push_load_content_with_new_core_from_menu(coreLine
-            ,gameLine,&content_info
-            ,CORE_TYPE_PLAIN,NULL,NULL)){
+    if (!task_push_load_content_with_new_core_from_menu(coreLine, gameLine, &content_info,
+                                                        CORE_TYPE_PLAIN, NULL, NULL)) {
     } else {
-        have_load ++;
+        have_load++;
         //只有核心
-        if (gameLine == NULL || strlen(gameLine) == 0){
-            if (!task_push_start_current_core(&content_info)){
+        if (gameLine == NULL || strlen(gameLine) == 0) {
+            if (!task_push_start_current_core(&content_info)) {
             }
         }
     }
@@ -7444,9 +7463,9 @@ int generic_menu_entry_action(
       void *userdata, menu_entry_t *entry, size_t i,
       enum menu_action action)
 {
-    if (have_load == 0) {
-        return generic_menu_entry_action2(userdata, entry, i, action);
-    }
+   if (have_load == 0) {
+      return generic_menu_entry_action2(userdata, entry, i, action);
+   }
    int ret                        = 0;
    struct menu_state *menu_st     = &menu_driver_state;
    const menu_ctx_driver_t
