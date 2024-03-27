@@ -4133,13 +4133,13 @@ static unsigned menu_displaylist_parse_playlists(
          show_add_content = (settings->uints.menu_content_show_add_entry ==
                MENU_ADD_CONTENT_ENTRY_DISPLAY_PLAYLISTS_TAB);
 
-/*      if (show_add_content)
+      if (show_add_content)
          if (menu_entries_append(info_list,
                   msg_hash_to_str(MENU_ENUM_LABEL_VALUE_ADD_CONTENT_LIST),
                   msg_hash_to_str(MENU_ENUM_LABEL_ADD_CONTENT_LIST),
                   MENU_ENUM_LABEL_ADD_CONTENT_LIST,
                   MENU_SETTING_ACTION, 0, 0, NULL))
-            count++;*/
+            count++;
 
       if (settings->bools.menu_content_show_favorites)
          if (menu_entries_append(info_list,
@@ -10397,11 +10397,11 @@ unsigned menu_displaylist_build_list(
             bool settings_show_ai_service = settings->bools.settings_show_ai_service;
 #endif
             menu_displaylist_build_info_selective_t build_list[] = {
-/*               {MENU_ENUM_LABEL_USER_INTERFACE_SETTINGS,     PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_USER_INTERFACE_SETTINGS,     PARSE_ACTION, true},
                {MENU_ENUM_LABEL_VIDEO_SETTINGS,              PARSE_ACTION, true},
-               {MENU_ENUM_LABEL_AUDIO_SETTINGS,              PARSE_ACTION, true},*/
+               {MENU_ENUM_LABEL_AUDIO_SETTINGS,              PARSE_ACTION, true},
                {MENU_ENUM_LABEL_INPUT_SETTINGS,              PARSE_ACTION, true},
-/*               {MENU_ENUM_LABEL_LATENCY_SETTINGS,            PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_LATENCY_SETTINGS,            PARSE_ACTION, true},
                {MENU_ENUM_LABEL_FRAME_THROTTLE_SETTINGS,     PARSE_ACTION, true},
                {MENU_ENUM_LABEL_DRIVER_SETTINGS,             PARSE_ACTION, true},
                {MENU_ENUM_LABEL_PLAYLIST_SETTINGS,           PARSE_ACTION, true},
@@ -10411,25 +10411,25 @@ unsigned menu_displaylist_build_list(
                {MENU_ENUM_LABEL_CONFIGURATION_SETTINGS,      PARSE_ACTION, true},
                {MENU_ENUM_LABEL_ACCESSIBILITY_SETTINGS,      PARSE_ACTION, true},
                {MENU_ENUM_LABEL_POWER_MANAGEMENT_SETTINGS,   PARSE_ACTION, true},
-               {MENU_ENUM_LABEL_BLUETOOTH_SETTINGS,          PARSE_ACTION, true},*/
+               {MENU_ENUM_LABEL_BLUETOOTH_SETTINGS,          PARSE_ACTION, true},
 #ifdef HAVE_NETWORKING
-/*               {MENU_ENUM_LABEL_WIFI_SETTINGS,               PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_WIFI_SETTINGS,               PARSE_ACTION, true},
                {MENU_ENUM_LABEL_NETWORK_SETTINGS,            PARSE_ACTION, true},
-               {MENU_ENUM_LABEL_NETPLAY_LAN_SCAN_SETTINGS,   PARSE_ACTION, true},*/
+               {MENU_ENUM_LABEL_NETPLAY_LAN_SCAN_SETTINGS,   PARSE_ACTION, true},
 #endif
 #ifdef HAVE_CHEEVOS
-               //{MENU_ENUM_LABEL_RETRO_ACHIEVEMENTS_SETTINGS, PARSE_ACTION},
+               {MENU_ENUM_LABEL_RETRO_ACHIEVEMENTS_SETTINGS, PARSE_ACTION},
 #endif
-/*               {MENU_ENUM_LABEL_USER_SETTINGS,               PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_USER_SETTINGS,               PARSE_ACTION, true},
                {MENU_ENUM_LABEL_DIRECTORY_SETTINGS,          PARSE_ACTION, true},
-               {MENU_ENUM_LABEL_LAKKA_SERVICES,              PARSE_ACTION, true},*/
+               {MENU_ENUM_LABEL_LAKKA_SERVICES,              PARSE_ACTION, true},
 #ifdef HAVE_LAKKA_SWITCH
-               //{MENU_ENUM_LABEL_LAKKA_SWITCH_OPTIONS,        PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_LAKKA_SWITCH_OPTIONS,        PARSE_ACTION, true},
 #endif
 #ifdef HAVE_MIST
-               //{MENU_ENUM_LABEL_STEAM_SETTINGS,              PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_STEAM_SETTINGS,              PARSE_ACTION, true},
 #endif
-               //{MENU_ENUM_LABEL_LOGGING_SETTINGS,            PARSE_ACTION, true},
+               {MENU_ENUM_LABEL_LOGGING_SETTINGS,            PARSE_ACTION, true},
             };
 
 
@@ -14414,11 +14414,11 @@ bool menu_displaylist_ctl(enum menu_displaylist_ctl_state type,
                   show_add_content = (settings->uints.menu_content_show_add_entry ==
                         MENU_ADD_CONTENT_ENTRY_DISPLAY_MAIN_TAB);
 
-/*               if (show_add_content)
+               if (show_add_content)
                   if (MENU_DISPLAYLIST_PARSE_SETTINGS_ENUM(info->list,
                            MENU_ENUM_LABEL_ADD_CONTENT_LIST,
                            PARSE_ACTION, false) == 0)
-                     count++;*/
+                     count++;
 
 #ifdef HAVE_NETWORKING
                if (settings->bools.menu_content_show_netplay)
