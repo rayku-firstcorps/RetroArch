@@ -5926,6 +5926,10 @@ static void materialui_render_header(
    /* > Draw 'back' icon, if required */
    menu_title_margin = mui->margin;
 
+   if (string_is_equal(menu_title, msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CONTENT_SETTINGS))) {
+      show_back_icon = false;
+   }
+
    if (show_back_icon)
    {
       menu_title_margin = mui->icon_size;
@@ -8464,7 +8468,7 @@ static void materialui_populate_nav_bar(
    /* Menu tabs */
 
    /* > Main menu */
-   mui->nav_bar.menu_tabs[menu_tab_index].type          =
+/*   mui->nav_bar.menu_tabs[menu_tab_index].type          =
          MUI_NAV_BAR_MENU_TAB_MAIN;
    mui->nav_bar.menu_tabs[menu_tab_index].texture_index =
          MUI_TEXTURE_TAB_MAIN;
@@ -8474,10 +8478,10 @@ static void materialui_populate_nav_bar(
    if (mui->nav_bar.menu_tabs[menu_tab_index].active)
       mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
-   menu_tab_index++;
+   menu_tab_index++;*/
 
    /* > Playlists */
-   if (menu_content_show_playlists)
+/*   if (menu_content_show_playlists)
    {
       mui->nav_bar.menu_tabs[menu_tab_index].type          =
             MUI_NAV_BAR_MENU_TAB_PLAYLISTS;
@@ -8490,10 +8494,10 @@ static void materialui_populate_nav_bar(
          mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
       menu_tab_index++;
-   }
+   }*/
 
    /* > Settings */
-   mui->nav_bar.menu_tabs[menu_tab_index].type          =
+/*   mui->nav_bar.menu_tabs[menu_tab_index].type          =
          MUI_NAV_BAR_MENU_TAB_SETTINGS;
    mui->nav_bar.menu_tabs[menu_tab_index].texture_index =
          MUI_TEXTURE_TAB_SETTINGS;
@@ -8503,7 +8507,7 @@ static void materialui_populate_nav_bar(
    if (mui->nav_bar.menu_tabs[menu_tab_index].active)
       mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
-   menu_tab_index++;
+   menu_tab_index++;*/
 
    /* Cache current number of menu tabs */
    mui->nav_bar.num_menu_tabs = menu_tab_index;

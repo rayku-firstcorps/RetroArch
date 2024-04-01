@@ -3475,7 +3475,8 @@ static int menu_displaylist_parse_load_content_settings(
          if (menu_entries_append(list,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CLOSE_CONTENT),
                msg_hash_to_str(MENU_ENUM_LABEL_CLOSE_CONTENT),
-               MENU_ENUM_LABEL_CLOSE_CONTENT,
+               //MENU_ENUM_LABEL_CLOSE_CONTENT,
+               MENU_ENUM_LABEL_QUIT_RETROARCH,
                horizontal ? MENU_SETTING_ACTION_CLOSE_HORIZONTAL :
                      MENU_SETTING_ACTION_CLOSE,
                0, 0, NULL))
@@ -3562,14 +3563,14 @@ static int menu_displaylist_parse_load_content_settings(
          }
       }
 
-      if ((!retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL))
+/*      if ((!retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL))
             && disk_control_enabled(&sys_info->disk_control))
          if (menu_entries_append(list,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_DISK_OPTIONS),
                msg_hash_to_str(MENU_ENUM_LABEL_DISK_OPTIONS),
                MENU_ENUM_LABEL_DISK_OPTIONS,
                MENU_SETTING_ACTION_CORE_DISK_OPTIONS, 0, 0, NULL))
-            count++;
+            count++;*/
 
 #ifdef HAVE_SCREENSHOTS
       if (settings->bools.quick_menu_show_take_screenshot)
@@ -7509,19 +7510,19 @@ unsigned menu_displaylist_build_list(
             unsigned max_users = settings->uints.input_max_users;
 
 #ifdef HAVE_CONFIGFILE
-            if (menu_entries_append(list,
+/*            if (menu_entries_append(list,
                   msg_hash_to_str(MENU_ENUM_LABEL_VALUE_REMAP_FILE_MANAGER_LIST),
                   msg_hash_to_str(MENU_ENUM_LABEL_REMAP_FILE_MANAGER_LIST),
                   MENU_ENUM_LABEL_REMAP_FILE_MANAGER_LIST,
                   MENU_SETTING_ACTION_REMAP_FILE_MANAGER_LIST, 0, 0, NULL))
-               count++;
+               count++;*/
 #endif
-            if (menu_entries_append(list,
+/*            if (menu_entries_append(list,
                      msg_hash_to_str(MENU_ENUM_LABEL_VALUE_INPUT_TURBO_FIRE_SETTINGS),
                      msg_hash_to_str(MENU_ENUM_LABEL_INPUT_TURBO_FIRE_SETTINGS),
                      MENU_ENUM_LABEL_INPUT_TURBO_FIRE_SETTINGS,
                      MENU_SETTING_ACTION, 0, 0, NULL))
-               count++;
+               count++;*/
 
             for (p = 0; p < max_users; p++)
             {

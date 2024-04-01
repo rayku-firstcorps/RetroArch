@@ -1,7 +1,10 @@
 package com.retroarch.browser.preferences.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -102,6 +105,25 @@ public final class UserPreferences
 
 		try {
 			new File(new_path).createNewFile();
+			String[] files = ctx.getAssets().list("");
+			for (int i = 0;i < files.length;i++ ){
+				 String fileName = files[i];
+				 if (fileName.equals("retroarch.cfg")) {
+					 InputStream in = ctx.getAssets().open(fileName);
+					 OutputStream out = new FileOutputStream(new File(new_path));
+					 byte[] buf = new byte[1024];
+					 int length;
+
+					 while ((length = in.read(buf)) > 0)
+					 {
+						 out.write(buf, 0, length);
+					 }
+
+					 in.close();
+					 out.close();
+					 break;
+				 }
+			}
 		}
 		catch (IOException e)
 		{
