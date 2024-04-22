@@ -5926,10 +5926,6 @@ static void materialui_render_header(
    /* > Draw 'back' icon, if required */
    menu_title_margin = mui->margin;
 
-/*   if (string_is_equal(menu_title, msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CONTENT_SETTINGS))) {
-      show_back_icon = false;
-   }*/
-
    if (show_back_icon)
    {
       menu_title_margin = mui->icon_size;
@@ -10929,6 +10925,8 @@ static void materialui_list_insert(
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_MENU_SETTINGS))
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_ONSCREEN_OVERLAY_SETTINGS))
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_OSK_OVERLAY_SETTINGS))
+                  || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_OVERLAY_LIGHTGUN_SETTINGS))
+                  || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_OVERLAY_MOUSE_SETTINGS))
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_ONSCREEN_NOTIFICATIONS_SETTINGS))
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_ONSCREEN_NOTIFICATIONS_VIEWS_SETTINGS))
                   || string_is_equal(label, msg_hash_to_str(MENU_ENUM_LABEL_ACCOUNTS_LIST))

@@ -643,6 +643,10 @@ MSG_HASH(
    "CPU Cores"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_JIT_AVAILABLE,
+   "JIT Available"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_FRONTEND_IDENTIFIER,
    "Frontend Identifier"
    )
@@ -2093,6 +2097,18 @@ MSG_HASH(
 MSG_HASH(
    MENU_ENUM_LABEL_VALUE_VIDEO_GPU_SCREENSHOT,
    "GPU Screenshot"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_VIDEO_SCAN_SUBFRAMES,
+   "Rolling scanline simulation"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_VIDEO_SCAN_SUBFRAMES,
+   "Simulates a basic rolling scanline over multiple sub-frames by dividing the screen up vertically and rendering each part of the screen according to how many sub frames there are"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_HELP_VIDEO_SCAN_SUBFRAMES,
+   "Simulates a basic rolling scanline over multiple sub-frames by dividing the screen up vertically and rendering each part of the screen according to how many sub frames there are from the top of the screen down"
    )
 MSG_HASH(
    MENU_ENUM_SUBLABEL_VIDEO_GPU_SCREENSHOT,
@@ -5394,6 +5410,30 @@ MSG_HASH(
    MENU_ENUM_SUBLABEL_OSK_OVERLAY_SETTINGS,
    "Select and adjust a keyboard overlay."
    )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_POINTER_ENABLE,
+   "Enable Overlay Lightgun, Mouse, and Pointer"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_POINTER_ENABLE,
+   "Use any touch inputs not pressing overlay controls to create pointing device input for the core."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_OVERLAY_LIGHTGUN_SETTINGS,
+   "Overlay Lightgun"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_OVERLAY_LIGHTGUN_SETTINGS,
+   "Configure lightgun input sent from the overlay."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_OVERLAY_MOUSE_SETTINGS,
+   "Overlay Mouse"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_OVERLAY_MOUSE_SETTINGS,
+   "Configure mouse input sent from the overlay. Note: 1-, 2-, and 3-finger taps send left, right, and middle button clicks."
+   )
 
 /* Settings > On-Screen Display > On-Screen Overlay > Keyboard Overlay */
 
@@ -5420,6 +5460,120 @@ MSG_HASH(
 MSG_HASH(
    MENU_ENUM_SUBLABEL_OSK_OVERLAY_OPACITY,
    "Opacity of all UI elements of the keyboard overlay."
+   )
+
+/* Settings > On-Screen Display > On-Screen Overlay > Overlay Lightgun */
+
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_PORT,
+   "Lightgun Port"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_PORT,
+   "Set the core port to receive input from the overlay lightgun."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_PORT_ANY,
+   "Any"
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_TRIGGER_ON_TOUCH,
+   "Trigger on Touch"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_TRIGGER_ON_TOUCH,
+   "Send trigger input with pointer input."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_TRIGGER_DELAY,
+   "Trigger Delay (frames)"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_TRIGGER_DELAY,
+   "Delay trigger input to allow the cursor time to move. This delay is also used to wait for the correct multi-touch count."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_TWO_TOUCH_INPUT,
+   "2-Touch Input"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_TWO_TOUCH_INPUT,
+   "Select input to send when two pointers are on screen. Trigger Delay should be nonzero to distinguish from other input."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_THREE_TOUCH_INPUT,
+   "3-Touch Input"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_THREE_TOUCH_INPUT,
+   "Select input to send when three pointers are on screen. Trigger Delay should be nonzero to distinguish from other input."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_FOUR_TOUCH_INPUT,
+   "4-Touch Input"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_FOUR_TOUCH_INPUT,
+   "Select input to send when four pointers are on screen. Trigger Delay should be nonzero to distinguish from other input."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_LIGHTGUN_ALLOW_OFFSCREEN,
+   "Allow Off-Screen"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_LIGHTGUN_ALLOW_OFFSCREEN,
+   "Allow out-of-bounds aiming. Disable to clamp off-screen aim to the in-bounds edge."
+   )
+
+/* Settings > On-Screen Display > On-Screen Overlay > Overlay Mouse */
+
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_SPEED,
+   "Mouse Speed"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_SPEED,
+   "Adjust cursor movement speed."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_HOLD_TO_DRAG,
+   "Long Press to Drag"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_HOLD_TO_DRAG,
+   "Long press the screen to begin holding a button."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_HOLD_MSEC,
+   "Long Press Threshold (ms)"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_HOLD_MSEC,
+   "Adjust the hold time required for a long press."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_DTAP_TO_DRAG,
+   "Double Tap to Drag"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_DTAP_TO_DRAG,
+   "Double tap the screen to begin holding a button on the second tap. Adds latency to mouse clicks."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_DTAP_MSEC,
+   "Double Tap Threshold (ms)"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_DTAP_MSEC,
+   "Adjust the allowable time between taps when detecting a double tap."
+   )
+MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_INPUT_OVERLAY_MOUSE_SWIPE_THRESHOLD,
+   "Swipe Threshold"
+   )
+MSG_HASH(
+   MENU_ENUM_SUBLABEL_INPUT_OVERLAY_MOUSE_SWIPE_THRESHOLD,
+   "Adjust the allowable drift range when detecting a long press or tap. Expressed as a percentage of the smaller screen dimension."
    )
 
 /* Settings > On-Screen Display > Video Layout */

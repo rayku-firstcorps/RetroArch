@@ -401,6 +401,11 @@
  */
 #define DEFAULT_SHADER_SUBFRAMES 1
 
+/* Divides implements basic rolling scanning of sub frames - does this simply by scrolling a 
+ * a scissor rect down the screen according to how many sub frames there are  
+ */
+#define DEFAULT_SCAN_SUBFRAMES false
+
 /* Inserts black frame(s) inbetween frames.
  * Useful for Higher Hz monitors (set to multiples of 60 Hz) who want to play 60 Hz 
  * material with CRT-like motion clarity.
@@ -601,6 +606,24 @@
 #else
 #define DEFAULT_INPUT_OVERLAY_AUTO_SCALE false
 #endif
+
+#if defined(RARCH_MOBILE)
+#define DEFAULT_INPUT_OVERLAY_POINTER_ENABLE true
+#else
+#define DEFAULT_INPUT_OVERLAY_POINTER_ENABLE false
+#endif
+
+#define DEFAULT_INPUT_OVERLAY_LIGHTGUN_PORT -1
+#define DEFAULT_INPUT_OVERLAY_LIGHTGUN_TRIGGER_ON_TOUCH true
+#define DEFAULT_INPUT_OVERLAY_LIGHTGUN_TRIGGER_DELAY 1
+#define DEFAULT_INPUT_OVERLAY_LIGHTGUN_MULTI_TOUCH_INPUT 0
+#define DEFAULT_INPUT_OVERLAY_LIGHTGUN_ALLOW_OFFSCREEN true
+#define DEFAULT_INPUT_OVERLAY_MOUSE_SPEED 1.0f
+#define DEFAULT_INPUT_OVERLAY_MOUSE_HOLD_TO_DRAG true
+#define DEFAULT_INPUT_OVERLAY_MOUSE_HOLD_MSEC 200
+#define DEFAULT_INPUT_OVERLAY_MOUSE_DTAP_TO_DRAG false
+#define DEFAULT_INPUT_OVERLAY_MOUSE_DTAP_MSEC 200
+#define DEFAULT_INPUT_OVERLAY_MOUSE_SWIPE_THRESHOLD 1.0f
 
 #ifdef UDEV_TOUCH_SUPPORT
 #define DEFAULT_INPUT_TOUCH_VMOUSE_POINTER true
@@ -1534,6 +1557,14 @@
 #define DEFAULT_TURBO_DEFAULT_BTN RETRO_DEVICE_ID_JOYPAD_B
 #define DEFAULT_ALLOW_TURBO_DPAD false
 
+/* Enable automatic mouse grab by default
+ * only on Android */
+#if defined(ANDROID)
+#define DEFAULT_INPUT_AUTO_MOUSE_GRAB true
+#else
+#define DEFAULT_INPUT_AUTO_MOUSE_GRAB false
+#endif
+
 #if TARGET_OS_IPHONE
 #define DEFAULT_INPUT_KEYBOARD_GAMEPAD_ENABLE false
 #else
@@ -1814,18 +1845,3 @@
 #define DEFAULT_FILTER_BY_CURRENT_CORE false
 
 #endif
-/*#define DEFAULT_MENU_SHOW_ONLINE_UPDATER false
-#define DEFAULT_MENU_SHOW_LOAD_CORE false
-#define DEFAULT_MENU_SHOW_LOAD_CONTENT false
-#define DEFAULT_CONTENT_SHOW_HISTORY false
-#define DEFAULT_CONTENT_SHOW_NETPLAY false
-#define DEFAULT_MENU_SHOW_INFORMATION false
-#define DEFAULT_MENU_SHOW_CONFIGURATIONS true
-#define DEFAULT_CONFIG_SAVE_ON_EXIT true
-#define DEFAULT_CONTENT_SHOW_FAVORITES false
-#define DEFAULT_CONTENT_SHOW_IMAGES false
-#define DEFAULT_MENU_CONTENT_SHOW_CONTENTLESS_CORES MENU_CONTENTLESS_CORES_DISPLAY_NONE
-#define DEFAULT_MENU_CONTENT_SHOW_EXPLORE false
-#define DEFAULT_CONTENT_SHOW_PLAYLISTS false*/
-/*#define DEFAULT_MATERIALUI_SHOW_NAV_BAR false
-#define DEFAULT_MATERIALUI_AUTO_ROTATE_NAV_BAR false*/

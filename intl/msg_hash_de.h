@@ -615,6 +615,10 @@ MSG_HASH(
    "CPU-Kerne"
    )
 MSG_HASH(
+   MENU_ENUM_LABEL_VALUE_JIT_AVAILABLE,
+   "JIT verfügbar"
+   )
+MSG_HASH(
    MENU_ENUM_LABEL_VALUE_SYSTEM_INFO_FRONTEND_IDENTIFIER,
    "Frontend-Kennung"
    )
@@ -5221,6 +5225,12 @@ MSG_HASH(
    MENU_ENUM_SUBLABEL_OSK_OVERLAY_OPACITY,
    "Deckkraft aller Bedienelemente des Tastatur-Overlays."
    )
+
+/* Settings > On-Screen Display > On-Screen Overlay > Overlay Lightgun */
+
+
+/* Settings > On-Screen Display > On-Screen Overlay > Overlay Mouse */
+
 
 /* Settings > On-Screen Display > Video Layout */
 
