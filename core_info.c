@@ -2776,7 +2776,7 @@ bool core_info_current_supports_savestate(void)
 
    if (settings->bools.core_info_savestate_bypass)
       return true;
-
+   return true;
    /* If no core is currently loaded, assume
     * by default that all savestate functionality
     * is supported */
