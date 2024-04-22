@@ -1999,7 +1999,7 @@ static struct config_bool_setting *populate_settings_bool(
    SETTING_BOOL("materialui_icons_enable",                    &settings->bools.menu_materialui_icons_enable, true, DEFAULT_MATERIALUI_ICONS_ENABLE, false);
    SETTING_BOOL("materialui_switch_icons",                    &settings->bools.menu_materialui_switch_icons, true, DEFAULT_MATERIALUI_SWITCH_ICONS, false);
    SETTING_BOOL("materialui_playlist_icons_enable",           &settings->bools.menu_materialui_playlist_icons_enable, true, DEFAULT_MATERIALUI_PLAYLIST_ICONS_ENABLE, false);
-   SETTING_BOOL("materialui_show_nav_bar",                    &settings->bools.menu_materialui_show_nav_bar, true, DEFAULT_MATERIALUI_SHOW_NAV_BAR, false);
+   SETTING_BOOL("materialui_show_nav_bar",                    &settings->bools.menu_materialui_show_nav_bar, false, DEFAULT_MATERIALUI_SHOW_NAV_BAR, false);
    SETTING_BOOL("materialui_auto_rotate_nav_bar",             &settings->bools.menu_materialui_auto_rotate_nav_bar, true, DEFAULT_MATERIALUI_AUTO_ROTATE_NAV_BAR, false);
    SETTING_BOOL("materialui_dual_thumbnail_list_view_enable", &settings->bools.menu_materialui_dual_thumbnail_list_view_enable, true, DEFAULT_MATERIALUI_DUAL_THUMBNAIL_LIST_VIEW_ENABLE, false);
    SETTING_BOOL("materialui_thumbnail_background_enable",     &settings->bools.menu_materialui_thumbnail_background_enable, true, DEFAULT_MATERIALUI_THUMBNAIL_BACKGROUND_ENABLE, false);

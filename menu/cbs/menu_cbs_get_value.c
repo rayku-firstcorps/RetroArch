@@ -1653,6 +1653,11 @@ static void menu_action_setting_disp_set_label_core_option(
    {
       const char *coreopt_label    = core_option_manager_get_val_label(coreopts,
             type - MENU_SETTINGS_CORE_OPTION_START);
+      const char *hans_label_str       = core_option_manager_get_hans_label(coreopt_label);
+      if (!string_is_empty(hans_label_str)) {
+         coreopt_label = hans_label_str;
+      }
+
       if (!string_is_empty(coreopt_label))
          strlcpy(s, coreopt_label, len);
    }

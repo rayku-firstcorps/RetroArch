@@ -1567,6 +1567,32 @@ const char *core_option_manager_get_desc(core_option_manager_t *opt,
    return desc;
 }
 
+const char *core_option_manager_get_hans_desc(const char *desc) {
+   const char *hans_desc = NULL;
+
+   if (string_is_equal_noncase(desc, "Resolution scale factor")) {
+      hans_desc = "分辨率比例";
+   } else if (string_is_equal_noncase(desc, "Screen layout positioning")) {
+      hans_desc = "显示模式";
+   } else if (string_is_equal_noncase(desc, "Screen Layout")) {
+      hans_desc = "屏幕";
+   } else if (string_is_equal_noncase(desc, "Frameskip")
+   || string_is_equal_noncase(desc, "跳帧")) {
+      hans_desc = "跳帧";
+   } else if (string_is_equal_noncase(desc, "Internal Resolution")
+   || string_is_equal_noncase(desc, "EFB Scale")) {
+      hans_desc = "分辨率";
+   } else if (string_is_equal_noncase(desc, "Turbo Enable")) {
+      hans_desc = "连发键";
+   } else if (string_is_equal_noncase(desc, "Preferred Aspect Ratio")
+   || string_is_equal_noncase(desc, "纵横比")) {
+      hans_desc = "纵横比";
+   }
+
+   return hans_desc;
+}
+
+
 /**
  * core_option_manager_get_info:
  *
@@ -1656,6 +1682,80 @@ const char *core_option_manager_get_val_label(core_option_manager_t *opt,
    option = (struct core_option*)&opt->opts[idx];
 
    return option->val_labels->elems[option->index].data;
+}
+const char *core_option_manager_get_hans_label(const char *label_str)
+{
+   const char *hans_label_str = NULL;
+   ///纵横比
+   if (string_is_equal(label_str, "4:3 (Preserved)")) {
+      hans_label_str = "4:3 (保守)";
+   } else if (string_is_equal(label_str, "Uncorrected")) {
+      hans_label_str = "未修正比例";
+   } else if (string_is_equal(label_str, "Auto")){
+      hans_label_str = "自动";
+   }
+   if (string_is_equal(label_str, "PAR")) {
+      hans_label_str = "默认";
+   }
+   ///显示模式
+   if (string_is_equal(label_str, "Default Top-Bottom Screen")){
+      hans_label_str = "默认上下双屏";
+   } else if (string_is_equal(label_str, "Single Screen Only")){
+      hans_label_str = "单主屏幕";
+   } else if (string_is_equal(label_str, "Large Screen, Small Screen")){
+      hans_label_str = "主大屏，小副屏";
+   } else if (string_is_equal(label_str, "Side by Side")){
+      hans_label_str = "并行屏幕";
+   }
+   ///分辨率比例
+   if (string_is_equal(label_str, "1x (Native)")) {
+      hans_label_str = "1倍 (默认)";
+   } else if (string_is_equal(label_str, "2x")) {
+      hans_label_str = "2倍";
+   } else if (string_is_equal(label_str, "3x")) {
+      hans_label_str = "3倍";
+   } else if (string_is_equal(label_str, "4x")) {
+      hans_label_str = "4倍";
+   } else if (string_is_equal(label_str, "5x")) {
+      hans_label_str = "5倍";
+   } else if (string_is_equal(label_str, "6x")) {
+      hans_label_str = "6倍";
+   } else if (string_is_equal(label_str, "7x")) {
+      hans_label_str = "7倍";
+   } else if (string_is_equal(label_str, "8x")) {
+      hans_label_str = "8倍";
+   } else if (string_is_equal(label_str, "9x")) {
+      hans_label_str = "9倍";
+   } else if (string_is_equal(label_str, "10x")) {
+      hans_label_str = "10倍";
+   }
+   ///屏幕
+   if (string_is_equal(label_str, "Top/Bottom")) {
+      hans_label_str = "游戏屏/操作屏";
+   } else if (string_is_equal(label_str, "Bottom/Top")) {
+      hans_label_str = "操作屏/游戏屏";
+   } else if (string_is_equal(label_str, "Left/Right")) {
+      hans_label_str = "左/右";
+   } else if (string_is_equal(label_str, "Right/Left")) {
+      hans_label_str = "右/左";
+   } else if (string_is_equal(label_str, "Top only")) {
+      hans_label_str = "仅显示游戏屏";
+   } else if (string_is_equal(label_str, "Bottom only")) {
+      hans_label_str = "仅显示操作屏";
+   } else if (string_is_equal(label_str, "Hybrid/Top")) {
+      hans_label_str = "混合/游戏屏";
+   } else if (string_is_equal(label_str, "Hybrid/Bottom")) {
+      hans_label_str = "混合/操作屏";
+   }
+   ///连发键
+   if (string_is_equal(label_str, "玩家甲")) {
+      hans_label_str = "玩家1";
+   } else if (string_is_equal(label_str, "玩家乙")) {
+      hans_label_str = "玩家2";
+   } else if (string_is_equal(label_str, "Player 1 & 2")) {
+      hans_label_str = "玩家1&2";
+   }
+   return hans_label_str;
 }
 
 /**

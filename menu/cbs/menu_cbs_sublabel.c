@@ -2038,6 +2038,28 @@ static int action_bind_sublabel_core_options(
 
    return 0;
 }
+///获取翻译后的字符串
+const char *core_get_sublabel(const char *old_info)
+{
+   const char *info = NULL;
+   if (string_is_equal("Choose the preferred content aspect ratio. This will only apply when RetroArch's aspect ratio is set to 'Core provided' in the Video settings.",
+                       old_info)) {
+      info = "设置显示比例";
+   } else if (string_is_equal("Sets the internal resolution. Higher resolutions can provide better clarity for 3D scenes & objects, but will increase the performance requirements", old_info)) {
+      info = "设置显示分辨率";
+   } else if (string_is_equal("Select the screen layout to use.", old_info)) {
+      info = "显示模式";
+   } else if (string_is_equal("This will only apply when RetroArch's aspect ratio is set to 'Core provided' in the Video settings.", old_info)) {
+      info = "设置显示比例";
+   } else if (string_is_equal("Enables the use of the Turbo A and Turbo B buttons.", old_info)) {
+      info = "红白机专用连发键设置";
+   } else if (string_is_equal("Sets the amount of frames to skip.", old_info)
+   || string_is_equal("Skip frames to avoid audio buffer under-run (crackling). Improves performance at the expense of visual smoothness. 'Auto' skips frames when advised by the frontend. 'Auto (Threshold)' utilises the 'Frameskip Threshold (%)' setting. 'Fixed Interval' utilises the 'Frameskip Interval' setting.", old_info)) {
+      info = "设置跳帧值";
+   }
+
+   return info;
+}
 
 static int action_bind_sublabel_core_option(
       file_list_t *list,
@@ -2050,6 +2072,10 @@ static int action_bind_sublabel_core_option(
    {
       const char *info = core_option_manager_get_info(opt,
             type - MENU_SETTINGS_CORE_OPTION_START, true);
+      const char* new_info = core_get_sublabel(info);
+      if (!string_is_empty(new_info)) {
+         info = new_info;
+      }
       if (!string_is_empty(info))
          strlcpy(s, info, len);
    }

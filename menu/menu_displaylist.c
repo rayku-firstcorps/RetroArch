@@ -1287,6 +1287,10 @@ static unsigned menu_displaylist_parse_core_option_dropdown_list(
          else if (string_is_equal(val_label_str, lbl_disabled))
             val_label_str = val_off_str;
 
+         const char *hans_label_str       = core_option_manager_get_hans_label(val_label_str);
+         if (!string_is_empty(hans_label_str)) {
+             val_label_str = hans_label_str;
+         }
          if (menu_entries_append(info_list,
                val_label_str,
                val_d,
@@ -3498,14 +3502,14 @@ static int menu_displaylist_parse_load_content_settings(
        *   in order to prevent the display of an empty
        *   'No items' menu */
       if (settings->bools.quick_menu_show_close_content)
-         if (menu_entries_append(list,
+/*         if (menu_entries_append(list,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CLOSE_CONTENT),
                msg_hash_to_str(MENU_ENUM_LABEL_CLOSE_CONTENT),
                MENU_ENUM_LABEL_CLOSE_CONTENT,
                horizontal ? MENU_SETTING_ACTION_CLOSE_HORIZONTAL :
                      MENU_SETTING_ACTION_CLOSE,
                0, 0, NULL))
-            count++;
+            count++;*/
 
       if (     savestates_enabled
             && settings->bools.quick_menu_show_savestate_submenu)
@@ -3545,20 +3549,20 @@ static int menu_displaylist_parse_load_content_settings(
                if (!rcheevos_hardcore_active())
 #endif
                {
-                  if (menu_entries_append(list,
+/*                  if (menu_entries_append(list,
                            msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UNDO_LOAD_STATE),
                            msg_hash_to_str(MENU_ENUM_LABEL_UNDO_LOAD_STATE),
                            MENU_ENUM_LABEL_UNDO_LOAD_STATE,
                            MENU_SETTING_ACTION_LOADSTATE, 0, 0, NULL))
-                     count++;
+                     count++;*/
                }
 
-               if (menu_entries_append(list,
+/*               if (menu_entries_append(list,
                         msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UNDO_SAVE_STATE),
                         msg_hash_to_str(MENU_ENUM_LABEL_UNDO_SAVE_STATE),
                         MENU_ENUM_LABEL_UNDO_SAVE_STATE,
                         MENU_SETTING_ACTION_LOADSTATE, 0, 0, NULL))
-                  count++;
+                  count++;*/
             }
          }
       }
@@ -3569,12 +3573,12 @@ static int menu_displaylist_parse_load_content_settings(
          {
             /* Empty 'path' string signifies top level
              * core options menu */
-            if (menu_entries_append(list,
+/*            if (menu_entries_append(list,
                      "",
                      msg_hash_to_str(MENU_ENUM_LABEL_CORE_OPTIONS),
                      MENU_ENUM_LABEL_CORE_OPTIONS,
                      MENU_SETTING_ACTION_CORE_OPTIONS, 0, 0, NULL))
-               count++;
+               count++;*/
          }
 
          if (settings->bools.quick_menu_show_controls)
@@ -3588,14 +3592,14 @@ static int menu_displaylist_parse_load_content_settings(
          }
       }
 
-      if ((!retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL))
+/*      if ((!retroarch_ctl(RARCH_CTL_IS_DUMMY_CORE, NULL))
             && disk_control_enabled(&sys_info->disk_control))
          if (menu_entries_append(list,
                msg_hash_to_str(MENU_ENUM_LABEL_VALUE_DISK_OPTIONS),
                msg_hash_to_str(MENU_ENUM_LABEL_DISK_OPTIONS),
                MENU_ENUM_LABEL_DISK_OPTIONS,
                MENU_SETTING_ACTION_CORE_DISK_OPTIONS, 0, 0, NULL))
-            count++;
+            count++;*/
 
 #ifdef HAVE_SCREENSHOTS
       if (settings->bools.quick_menu_show_take_screenshot)
@@ -3609,6 +3613,34 @@ static int menu_displaylist_parse_load_content_settings(
       }
 #endif
 
+       ///核心选项
+       if (!settings->bools.kiosk_mode_enable){
+           if (settings->bools.quick_menu_show_options) {
+               if (menu_entries_append(list,
+                     "",
+                     msg_hash_to_str(MENU_ENUM_LABEL_CORE_OPTIONS),
+                     MENU_ENUM_LABEL_CORE_OPTIONS,
+                     MENU_SETTING_ACTION_CORE_OPTIONS, 0, 0, NULL))
+               count++;
+           }
+       }
+       ///联机
+      if (menu_entries_append(list,
+            msg_hash_to_str(MENU_ENUM_LABEL_VALUE_NETPLAY),
+            msg_hash_to_str(MENU_ENUM_LABEL_NETPLAY),
+            MENU_ENUM_LABEL_NETPLAY,
+            MENU_SETTING_ACTION_CORE_OPTIONS, 0, 0, NULL))
+         count++;
+        ///退出
+      if (settings->bools.quick_menu_show_close_content)
+         if (menu_entries_append(list,
+               msg_hash_to_str(MENU_ENUM_LABEL_VALUE_RESTART_RETROARCH),
+               msg_hash_to_str(MENU_ENUM_LABEL_QUIT_RETROARCH),
+               MENU_ENUM_LABEL_QUIT_RETROARCH,
+               horizontal ? MENU_SETTING_ACTION_CLOSE_HORIZONTAL :
+               MENU_SETTING_ACTION_CLOSE,
+               0, 0, NULL))
+            count++;
       if (string_is_not_equal(settings->arrays.record_driver, "null"))
       {
          recording_state_t *recording_st = recording_state_get_ptr();
@@ -7535,19 +7567,26 @@ unsigned menu_displaylist_build_list(
             unsigned max_users = settings->uints.input_max_users;
 
 #ifdef HAVE_CONFIGFILE
-            if (menu_entries_append(list,
+/*            if (menu_entries_append(list,
                   msg_hash_to_str(MENU_ENUM_LABEL_VALUE_REMAP_FILE_MANAGER_LIST),
                   msg_hash_to_str(MENU_ENUM_LABEL_REMAP_FILE_MANAGER_LIST),
                   MENU_ENUM_LABEL_REMAP_FILE_MANAGER_LIST,
                   MENU_SETTING_ACTION_REMAP_FILE_MANAGER_LIST, 0, 0, NULL))
-               count++;
+               count++;*/
 #endif
+            ///触觉反馈/振动
             if (menu_entries_append(list,
+                     msg_hash_to_str(MENU_ENUM_LABEL_VALUE_INPUT_HAPTIC_FEEDBACK_SETTINGS),
+                     msg_hash_to_str(MENU_ENUM_LABEL_INPUT_HAPTIC_FEEDBACK_SETTINGS),
+                     MENU_ENUM_LABEL_INPUT_HAPTIC_FEEDBACK_SETTINGS,
+                     MENU_SETTING_ACTION_REMAP_FILE_MANAGER_LIST, 0, 0, NULL))
+                count++;
+/*            if (menu_entries_append(list,
                      msg_hash_to_str(MENU_ENUM_LABEL_VALUE_INPUT_TURBO_FIRE_SETTINGS),
                      msg_hash_to_str(MENU_ENUM_LABEL_INPUT_TURBO_FIRE_SETTINGS),
                      MENU_ENUM_LABEL_INPUT_TURBO_FIRE_SETTINGS,
                      MENU_SETTING_ACTION, 0, 0, NULL))
-               count++;
+               count++;*/
 
             for (p = 0; p < max_users; p++)
             {
@@ -11168,7 +11207,7 @@ unsigned menu_displaylist_build_list(
          {
             bool menu_horizontal_animation             = settings->bools.menu_horizontal_animation;
             bool menu_materialui_icons_enable          = settings->bools.menu_materialui_icons_enable;
-            bool menu_materialui_show_nav_bar          = settings->bools.menu_materialui_show_nav_bar;
+            bool menu_materialui_show_nav_bar          = false;//settings->bools.menu_materialui_show_nav_bar;
             bool menu_use_preferred_system_color_theme = settings->bools.menu_use_preferred_system_color_theme;
             bool truncate_playlist                     = settings->bools.ozone_truncate_playlist_name;
             unsigned menu_rgui_color_theme             = settings->uints.menu_rgui_color_theme;
@@ -13486,20 +13525,20 @@ bool menu_displaylist_ctl(enum menu_displaylist_ctl_state type,
                   if (!rcheevos_hardcore_active())
 #endif
                   {
-                     if (menu_entries_append(info->list,
+/*                     if (menu_entries_append(info->list,
                               msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UNDO_LOAD_STATE),
                               msg_hash_to_str(MENU_ENUM_LABEL_UNDO_LOAD_STATE),
                               MENU_ENUM_LABEL_UNDO_LOAD_STATE,
                               MENU_SETTING_ACTION_LOADSTATE, 0, 0, NULL))
-                        count++;
+                        count++;*/
                   }
 
-                  if (menu_entries_append(info->list,
+/*                  if (menu_entries_append(info->list,
                            msg_hash_to_str(MENU_ENUM_LABEL_VALUE_UNDO_SAVE_STATE),
                            msg_hash_to_str(MENU_ENUM_LABEL_UNDO_SAVE_STATE),
                            MENU_ENUM_LABEL_UNDO_SAVE_STATE,
                            MENU_SETTING_ACTION_LOADSTATE, 0, 0, NULL))
-                     count++;
+                     count++;*/
                }
 #ifdef HAVE_BSV_MOVIE
                if (     savestates_enabled
@@ -13567,13 +13606,13 @@ bool menu_displaylist_ctl(enum menu_displaylist_ctl_state type,
                   bool is_category                = !string_is_empty(category);
                   core_option_manager_t *coreopts = NULL;
 
-                  if (game_specific_options && !is_category)
+/*                  if (game_specific_options && !is_category)
                      if (menu_entries_append(info->list,
                               msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CORE_OPTION_OVERRIDE_LIST),
                               msg_hash_to_str(MENU_ENUM_LABEL_CORE_OPTION_OVERRIDE_LIST),
                               MENU_ENUM_LABEL_CORE_OPTION_OVERRIDE_LIST,
                               MENU_SETTING_ACTION_CORE_OPTION_OVERRIDE_LIST, 0, 0, NULL))
-                        count++;
+                        count++;*/
 
                   if (retroarch_ctl(RARCH_CTL_CORE_OPTIONS_LIST_GET, &coreopts))
                   {
@@ -13609,12 +13648,20 @@ bool menu_displaylist_ctl(enum menu_displaylist_ctl_state type,
                               size_t opt_idx = option->opt_idx;
 
                               if (core_option_manager_get_visible(coreopts, opt_idx))
-                                 if (menu_entries_append(info->list,
-                                          core_option_manager_get_desc(coreopts, opt_idx, true),
+                              {
+                                 const char * desc = core_option_manager_get_desc(coreopts, opt_idx, true);
+                                 const char * hans_desc = core_option_manager_get_hans_desc(desc);
+                                 if (!string_is_empty(hans_desc))
+                                 {
+                                    desc = hans_desc;
+                                    if (menu_entries_append(info->list,
+                                          desc,
                                           "", MENU_ENUM_LABEL_CORE_OPTION_ENTRY,
                                           (unsigned)(MENU_SETTINGS_CORE_OPTION_START + opt_idx),
                                           0, 0, NULL))
-                                    count++;
+                                       count++;
+                                 }
+                              }
                            }
                            else if (option_item)
                            {
@@ -13631,12 +13678,56 @@ bool menu_displaylist_ctl(enum menu_displaylist_ctl_state type,
                               if (      category_visible
                                     && !string_is_empty(category_id))
                               {
-                                 if (menu_entries_append(info->list,
+/*                                 if (menu_entries_append(info->list,
                                           category_id,
                                           msg_hash_to_str(MENU_ENUM_LABEL_CORE_OPTIONS),
                                           MENU_ENUM_LABEL_CORE_OPTIONS,
                                           MENU_SETTING_ACTION_CORE_OPTIONS, 0, 0, NULL))
-                                    count++;
+                                    count++;*/
+
+                                 ///core_option_manager_get_category_visible
+                                 size_t j;
+                                 nested_list_item_t *category_item = NULL;
+                                 nested_list_t *option_list        = NULL;
+
+                                 if (  !coreopts
+                                       || string_is_empty(category_id))
+                                    continue;
+
+                                 /* Fetch category item from map */
+                                 if (!(category_item = nested_list_get_item(coreopts->option_map,
+                                                                            category_id, NULL)))
+                                    continue;
+
+                                 /* Get child options of specified category */
+                                 if (!(option_list = nested_list_item_get_children(category_item)))
+                                    continue;
+
+                                 /* Loop over child options */
+                                 for (j = 0; j < nested_list_get_size(option_list); j++)
+                                 {
+                                    nested_list_item_t *option_item  = nested_list_get_item_idx(option_list, j);
+                                    const struct core_option *option = (const struct core_option *)
+                                            nested_list_item_get_value(option_item);
+                                    /* Check if current option is visible */
+                                    if (option && option->visible){
+                                       size_t opt_idx = option->opt_idx;
+                                       if (core_option_manager_get_visible(coreopts, opt_idx)){
+                                          const char * desc = core_option_manager_get_desc(coreopts, opt_idx, true);
+                                          const char * hans_desc = core_option_manager_get_hans_desc(desc);
+                                          if (!string_is_empty(hans_desc))
+                                          {
+                                             desc = hans_desc;
+                                             if (menu_entries_append(info->list,
+                                                   desc,
+                                                   "", MENU_ENUM_LABEL_CORE_OPTION_ENTRY,
+                                                   (unsigned)(MENU_SETTINGS_CORE_OPTION_START + opt_idx),
+                                                   0, 0, NULL))
+                                                count++;
+                                          }
+                                       }
+                                    }
+                                 }
                               }
                            }
                         }

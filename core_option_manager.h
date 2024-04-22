@@ -321,6 +321,7 @@ bool core_option_manager_get_val_idx(core_option_manager_t *opt,
  **/
 const char *core_option_manager_get_desc(core_option_manager_t *opt,
       size_t idx, bool categorized);
+const char *core_option_manager_get_hans_desc(const char *desc);
 
 /**
  * core_option_manager_get_info:
@@ -373,7 +374,7 @@ const char *core_option_manager_get_val(core_option_manager_t *opt,
  **/
 const char *core_option_manager_get_val_label(core_option_manager_t *opt,
       size_t idx);
-
+const char *core_option_manager_get_hans_label(const char *label_str);
 /**
  * core_option_manager_get_visible:
  *

@@ -54,6 +54,7 @@
 #include "../../runtime_file.h"
 #include "../../file_path_special.h"
 #include "../../list_special.h"
+#include "../../core_option_manager.h"
 
 #ifdef HAVE_CHEEVOS
 #include "../../cheevos/cheevos_menu.h"
@@ -3580,7 +3581,7 @@ static void materialui_render(void *data,
    bool last_entry_found      = false;
    unsigned landscape_layout_optimization
                               = settings->uints.menu_materialui_landscape_layout_optimization;
-   bool show_nav_bar          = settings->bools.menu_materialui_show_nav_bar;
+   bool show_nav_bar          = false;//settings->bools.menu_materialui_show_nav_bar;
    bool auto_rotate_nav_bar   = settings->bools.menu_materialui_auto_rotate_nav_bar;
    unsigned thumbnail_upscale_threshold =
       settings->uints.gfx_thumbnail_upscale_threshold;
@@ -5925,7 +5926,9 @@ static void materialui_render_header(
 
    /* > Draw 'back' icon, if required */
    menu_title_margin = mui->margin;
-
+   if (string_is_equal(menu_title, msg_hash_to_str(MENU_ENUM_LABEL_VALUE_CONTENT_SETTINGS))) {
+      show_back_icon = false;
+   }
    if (show_back_icon)
    {
       menu_title_margin = mui->icon_size;
@@ -8140,10 +8143,10 @@ static void *materialui_init(void **userdata, bool video_is_threaded)
       * MUI_DIP_BASE_UNIT_SIZE;
    mui->flags                             = 0;
 
-   if (settings->bools.menu_materialui_show_nav_bar)
+/*   if (settings->bools.menu_materialui_show_nav_bar)
       mui->flags |= MUI_FLAG_LAST_SHOW_NAVBAR;
    if (settings->bools.menu_materialui_auto_rotate_nav_bar)
-      mui->flags |= MUI_FLAG_LAST_AUTO_ROTATE_NAVBAR;
+      mui->flags |= MUI_FLAG_LAST_AUTO_ROTATE_NAVBAR;*/
 
    mui->first_onscreen_entry              = 0;
    mui->last_onscreen_entry               = 0;
@@ -8464,7 +8467,7 @@ static void materialui_populate_nav_bar(
    /* Menu tabs */
 
    /* > Main menu */
-   mui->nav_bar.menu_tabs[menu_tab_index].type          =
+/*   mui->nav_bar.menu_tabs[menu_tab_index].type          =
          MUI_NAV_BAR_MENU_TAB_MAIN;
    mui->nav_bar.menu_tabs[menu_tab_index].texture_index =
          MUI_TEXTURE_TAB_MAIN;
@@ -8474,10 +8477,10 @@ static void materialui_populate_nav_bar(
    if (mui->nav_bar.menu_tabs[menu_tab_index].active)
       mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
-   menu_tab_index++;
+   menu_tab_index++;*/
 
    /* > Playlists */
-   if (menu_content_show_playlists)
+/*   if (menu_content_show_playlists)
    {
       mui->nav_bar.menu_tabs[menu_tab_index].type          =
             MUI_NAV_BAR_MENU_TAB_PLAYLISTS;
@@ -8490,10 +8493,10 @@ static void materialui_populate_nav_bar(
          mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
       menu_tab_index++;
-   }
+   }*/
 
    /* > Settings */
-   mui->nav_bar.menu_tabs[menu_tab_index].type          =
+/*   mui->nav_bar.menu_tabs[menu_tab_index].type          =
          MUI_NAV_BAR_MENU_TAB_SETTINGS;
    mui->nav_bar.menu_tabs[menu_tab_index].texture_index =
          MUI_TEXTURE_TAB_SETTINGS;
@@ -8503,7 +8506,7 @@ static void materialui_populate_nav_bar(
    if (mui->nav_bar.menu_tabs[menu_tab_index].active)
       mui->nav_bar.active_menu_tab_index = menu_tab_index;
 
-   menu_tab_index++;
+   menu_tab_index++;*/
 
    /* Cache current number of menu tabs */
    mui->nav_bar.num_menu_tabs = menu_tab_index;
@@ -8637,6 +8640,11 @@ static void materialui_populate_entries(
 
    /* Set menu title */
    menu_entries_get_title(mui->menu_title, sizeof(mui->menu_title));
+
+   const char *hans_desc = core_option_manager_get_hans_desc(mui->menu_title);
+   if (!string_is_empty(hans_desc)) {
+      strlcpy(mui->menu_title, hans_desc, sizeof(mui->menu_title));
+   }
 
    /* Check whether this is the playlists tab
     * (this requires special handling when
