@@ -72,23 +72,42 @@ public final class UserPreferences
 			append_path = File.separator + "retroarch.cfg";
 		}
 
+		boolean needCopyDeSmuME = false;
+		boolean needCopyCfg = true;
+		final String DeSmuMEDir = dataDir + "/config/DeSmuME";
+		final String DeSmuMEPath = dataDir + "/config/DeSmuME/DeSmuME.opt";
+		if (!(new File(DeSmuMEDir).exists() && new File(DeSmuMEPath).exists())) {
+			needCopyDeSmuME = true;
+		}
 		if (external != null)
 		{
 			String confPath = external + append_path;
-			if (new File(confPath).exists())
-				return confPath;
+			if (new File(confPath).exists()) {
+				if (!needCopyDeSmuME) {
+					return confPath;
+				}
+				needCopyCfg = false;
+			}
 		}
 		else if (internal != null)
 		{
 			String confPath = internal + append_path;
-			if (new File(confPath).exists())
-				return confPath;
+			if (new File(confPath).exists()) {
+				if (!needCopyDeSmuME) {
+					return confPath;
+				}
+				needCopyCfg = false;
+			}
 		}
 		else
 		{
 			String confPath = "/mnt/extsd" + append_path;
-			if (new File(confPath).exists())
-				return confPath;
+			if (new File(confPath).exists()){
+				if (!needCopyDeSmuME) {
+					return confPath;
+				}
+				needCopyCfg = false;
+			}
 		}
 
 		// Config file does not exist. Create empty one.
@@ -104,11 +123,16 @@ public final class UserPreferences
 			new_path = dataDir + append_path;
 
 		try {
-			new File(new_path).createNewFile();
+			if (needCopyCfg) {
+				new File(new_path).createNewFile();
+			}
+			if (!new File(DeSmuMEDir).exists()) {
+				new File(DeSmuMEDir).mkdirs();
+			}
 			String[] files = ctx.getAssets().list("");
 			for (int i = 0;i < files.length;i++ ){
 				 String fileName = files[i];
-				 if (fileName.equals("retroarch.cfg")) {
+				 if (fileName.equals("retroarch.cfg") && needCopyCfg) {
 					 InputStream in = ctx.getAssets().open(fileName);
 					 OutputStream out = new FileOutputStream(new File(new_path));
 					 byte[] buf = new byte[1024];
@@ -121,7 +145,27 @@ public final class UserPreferences
 
 					 in.close();
 					 out.close();
-					 break;
+					 needCopyCfg = false;
+					 if (!needCopyDeSmuME) {
+						 break;
+					 }
+				 } else if (fileName.equals("DeSmuME.opt") && needCopyDeSmuME) {
+					 InputStream in = ctx.getAssets().open(fileName);
+					 OutputStream out = new FileOutputStream(new File(DeSmuMEPath));
+					 byte[] buf = new byte[1024];
+					 int length;
+
+					 while ((length = in.read(buf)) > 0)
+					 {
+						 out.write(buf, 0, length);
+					 }
+
+					 in.close();
+					 out.close();
+					 needCopyDeSmuME = false;
+					 if (!needCopyCfg) {
+						 break;
+					 }
 				 }
 			}
 		}
