@@ -2532,6 +2532,11 @@ static void input_overlay_parse_layout(
    /* Perform auto-scaling, if required */
    if (layout_desc->auto_scale)
    {
+      ///自动时，竖屏修改坐标
+      if (display_aspect_ratio < 1.0f){
+         overlay_layout->y_offset = 0.06f;
+      }
+
       /* Sanity check - if scaling is blocked,
        * or aspect ratios are invalid, then we
        * can do nothing */
