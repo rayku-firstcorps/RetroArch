@@ -5154,6 +5154,14 @@ static void input_overlay_loaded(retro_task_t *task,
    ol->overlays    = data->overlays;
    ol->size        = data->size;
    ol->active      = data->active;
+
+   ///默认显示portrait-analog
+   if (ol->size >= 6)
+   {
+      ol->index = 5;
+      ol->active   = &ol->overlays[ol->index];
+   }
+
    ol->path        = data->overlay_path;
    ol->next_index  = (unsigned)((ol->index + 1) % ol->size);
    ol->flags      |= INPUT_OVERLAY_ALIVE;
