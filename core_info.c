@@ -2809,7 +2809,7 @@ bool core_info_current_supports_netplay(void)
 {
    core_info_state_t *p_coreinfo = &core_info_st;
    settings_t        *settings   = config_get_ptr();
-
+   return true;
    if (settings->bools.core_info_savestate_bypass)
       return true;
 
