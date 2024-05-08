@@ -7431,6 +7431,25 @@ int generic_menu_entry_action2(
                                "AAA","RetroArch==coreLine fd2 == NULL %s",coreLine);
             return 0;
         }
+        char baseDir[1024];
+        strcpy(baseDir, coreLine);
+        path_basedir(baseDir);
+        settings_t   *settings         = config_get_ptr();
+        ///修改core路径
+        fill_pathname_expand_special(settings->paths.directory_libretro,
+                                     baseDir,
+                                     sizeof(settings->paths.directory_libretro));
+        if (strstr(baseDir,"/gba/")) {
+            fill_pathname_expand_special(settings->paths.path_overlay,
+                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/poke2/retropad.cfg",
+                                         sizeof(settings->paths.path_overlay));
+            settings->bools.input_overlay_auto_scale = false;
+        } else {
+            fill_pathname_expand_special(settings->paths.path_overlay,
+                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/neo-retropad/neo-retropad.cfg",
+                                         sizeof(settings->paths.path_overlay));
+            settings->bools.input_overlay_auto_scale = true;
+        }
         fclose(fd2);
     }
 
