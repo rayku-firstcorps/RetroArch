@@ -3775,7 +3775,7 @@ static int menu_displaylist_parse_load_content_settings(
          }
 
 #ifdef HAVE_REWIND
-         if (      settings->bools.menu_show_rewind
+/*         if (      settings->bools.menu_show_rewind
                &&  core_info_current_supports_rewind())
          {
             if (menu_entries_append(list,
@@ -3784,7 +3784,7 @@ static int menu_displaylist_parse_load_content_settings(
                      MENU_ENUM_LABEL_REWIND_SETTINGS,
                      MENU_SETTING_ACTION, 0, 0, NULL))
                count++;
-         }
+         }*/
 #endif
 
          if (       (settings->bools.quick_menu_show_save_core_overrides
