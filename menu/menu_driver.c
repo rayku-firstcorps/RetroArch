@@ -7441,15 +7441,20 @@ int generic_menu_entry_action2(
                                      sizeof(settings->paths.directory_libretro));
         if (strstr(baseDir,"/gba/")) {
             fill_pathname_expand_special(settings->paths.path_overlay,
-                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/poke2/retropad.cfg",
+                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/simple_green/GBA_retropad.cfg",
+                                         sizeof(settings->paths.path_overlay));
+            settings->bools.input_overlay_auto_scale = false;
+        } else if (strstr(baseDir,"/nds/")) {
+            fill_pathname_expand_special(settings->paths.path_overlay,
+                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/simple_green/NDS_retropad.cfg",
                                          sizeof(settings->paths.path_overlay));
             settings->bools.input_overlay_auto_scale = false;
         } else {
-            fill_pathname_expand_special(settings->paths.path_overlay,
-                                         "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/neo-retropad/neo-retropad.cfg",
-                                         sizeof(settings->paths.path_overlay));
-            settings->bools.input_overlay_auto_scale = true;
-        }
+          fill_pathname_expand_special(settings->paths.path_overlay,
+                                       "/data/user/0/org.kuyo.game/virtual/data/user/0/com.retroarch.aarch64/overlays/gamepads/neo-retropad/neo-retropad.cfg",
+                                       sizeof(settings->paths.path_overlay));
+          settings->bools.input_overlay_auto_scale = true;
+       }
         fclose(fd2);
     }
 
