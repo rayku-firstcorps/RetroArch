@@ -18,6 +18,8 @@
 #endif
 
 #include <stdlib.h>
+#include <dlfcn.h>
+#include <string.h>
 
 #include <string/stdstring.h>
 
@@ -243,8 +245,76 @@ void egl_report_error(void)
    RARCH_ERR("[EGL]: #0x%x, %s\n", (unsigned)error, str);
 }
 
+typedef const unsigned char *(*ra_gl_get_string_fn)(unsigned int name);
+typedef const unsigned char *(*ra_gl_get_stringi_fn)(unsigned int name, unsigned int index);
+
+static ra_gl_get_string_fn ra_real_gl_get_string;
+static ra_gl_get_stringi_fn ra_real_gl_get_stringi;
+static const unsigned char ra_empty_ext[] = "";
+
+static bool ra_renderer_is_adreno(void)
+{
+   static int cached = -1;
+   const unsigned char *renderer;
+
+   if (cached >= 0)
+      return cached == 1;
+   cached = 0;
+   if (!ra_real_gl_get_string)
+      ra_real_gl_get_string = (ra_gl_get_string_fn)dlsym(RTLD_DEFAULT, "glGetString");
+   if (!ra_real_gl_get_string)
+      return false;
+   renderer = ra_real_gl_get_string(0x1F01);
+   if (renderer && strstr((const char *)renderer, "Adreno"))
+      cached = 1;
+   return cached == 1;
+}
+
+static const unsigned char *ra_gl_get_stringi_safe(unsigned int name, unsigned int index)
+{
+   if (name == 0x1F03 && ra_renderer_is_adreno())
+      return ra_empty_ext;
+   if (!ra_real_gl_get_stringi)
+      return ra_empty_ext;
+   return ra_real_gl_get_stringi(name, index);
+}
+
+/* Adreno's glGetString(GL_EXTENSIONS) enters an unimplemented stub and
+ * SIGSEGVs. Other GPUs keep the original call. glGetStringi from
+ * eglGetProcAddress is also a crashing stub on that driver; dlsym
+ * returns the real libGLESv2/libGLESv3 export everywhere it exists. */
+static const unsigned char *ra_gl_get_string_safe(unsigned int name)
+{
+   if (name != 0x1F03 || !ra_real_gl_get_string)
+      return ra_real_gl_get_string ? ra_real_gl_get_string(name)
+            : (const unsigned char *)"";
+
+   if (ra_renderer_is_adreno())
+      return (const unsigned char *)"";
+
+   return ra_real_gl_get_string(name);
+}
+
 gfx_ctx_proc_t egl_get_proc_address(const char *symbol)
 {
+   if (symbol && !strcmp(symbol, "glGetStringi"))
+   {
+      ra_real_gl_get_stringi = (ra_gl_get_stringi_fn)dlsym(RTLD_DEFAULT, "glGetStringi");
+      if (!ra_real_gl_get_stringi)
+         ra_real_gl_get_stringi = (ra_gl_get_stringi_fn)_egl_get_proc_address(symbol);
+      if (ra_real_gl_get_stringi)
+         return (gfx_ctx_proc_t)ra_gl_get_stringi_safe;
+   }
+
+   if (symbol && !strcmp(symbol, "glGetString"))
+   {
+      ra_real_gl_get_string = (ra_gl_get_string_fn)_egl_get_proc_address(symbol);
+      if (!ra_real_gl_get_string)
+         ra_real_gl_get_string = (ra_gl_get_string_fn)dlsym(RTLD_DEFAULT, "glGetString");
+      if (ra_real_gl_get_string)
+         return (gfx_ctx_proc_t)ra_gl_get_string_safe;
+   }
+
    return _egl_get_proc_address(symbol);
 }
 

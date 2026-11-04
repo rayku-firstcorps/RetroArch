@@ -48,34 +48,106 @@ void gl_query_core_context_unset(void)
    gl_core_context = false;
 }
 
+#if defined(HAVE_EGL)
+#include <EGL/egl.h>
+#endif
+
+#ifndef GL_NUM_EXTENSIONS
+#define GL_NUM_EXTENSIONS 0x821D
+#endif
+
+#include <dlfcn.h>
+
+typedef const GLubyte *(GL_APIENTRY *gl_getstringi_fn)(GLenum name, GLuint index);
+
+/* Adreno's eglGetProcAddress("glGetStringi") returns a non-NULL stub.
+ * Calling that stub logs "called unimplemented OpenGL ES API" and SIGSEGVs.
+ * The real export lives in libGLESv2.so / libGLESv3.so. */
+static gl_getstringi_fn gl_resolve_getstringi(void)
+{
+   static bool resolved = false;
+   static gl_getstringi_fn proc = NULL;
+
+   if (resolved && proc)
+      return proc;
+
+   resolved = true;
+   proc = (gl_getstringi_fn)dlsym(RTLD_DEFAULT, "glGetStringi");
+   return proc;
+}
+
+static bool gl_version_is_gles3(void)
+{
+   const char *version = (const char*)glGetString(GL_VERSION);
+   const char *found;
+   unsigned major = 0;
+
+   if (!version)
+      return false;
+   found = strstr(version, "OpenGL ES");
+   if (!found)
+      return false;
+   found += 9;
+   while (*found == ' ' || *found == '-')
+      found++;
+   if (found[0] == 'C' && found[1] == 'M')
+      return false;
+   if (sscanf(found, "%u", &major) != 1)
+      return false;
+   return major >= 3;
+}
+
+static bool gl_query_extension_indexed(const char *ext)
+{
+   gl_getstringi_fn get_stringi = gl_resolve_getstringi();
+   GLint i;
+   GLint exts = 0;
+
+   if (!get_stringi || !ext)
+      return false;
+
+   glGetIntegerv(GL_NUM_EXTENSIONS, &exts);
+   if (exts < 0)
+      exts = 0;
+   for (i = 0; i < exts; i++)
+   {
+      const char *str = (const char*)get_stringi(GL_EXTENSIONS, (GLuint)i);
+      if (str && strstr(str, ext))
+         return true;
+   }
+
+   return false;
+}
+
 bool gl_query_extension(const char *ext)
 {
    bool ret = false;
 
-   if (gl_query_core_context_in_use())
+   if (!ext)
+      return false;
+
+#if defined(HAVE_OPENGLES)
+   /* Adreno crashes inside both glGetString(GL_EXTENSIONS) and
+    * glGetStringi(GL_EXTENSIONS). Other GPUs still use the indexed query. */
    {
-#ifdef GL_NUM_EXTENSIONS
-      GLint i;
-      GLint exts = 0;
-      glGetIntegerv(GL_NUM_EXTENSIONS, &exts);
-      for (i = 0; i < exts; i++)
-      {
-         const char *str = (const char*)glGetStringi(GL_EXTENSIONS, i);
-         if (str && strstr(str, ext))
-         {
-            ret = true;
-            break;
-         }
-      }
-#endif
+      const char *renderer = (const char*)glGetString(0x1F01);
+      if (renderer && strstr(renderer, "Adreno"))
+         return false;
    }
-   else
+   if (!gl_version_is_gles3())
+      return false;
+   return gl_query_extension_indexed(ext);
+#else
+   if (gl_query_core_context_in_use())
+      return gl_query_extension_indexed(ext);
+
    {
       const char *str = (const char*)glGetString(GL_EXTENSIONS);
       ret = str && strstr(str, ext);
    }
 
    return ret;
+#endif
 }
 
 bool gl_check_error(char **error_string)

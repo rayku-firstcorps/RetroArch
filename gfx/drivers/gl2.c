@@ -1167,6 +1167,47 @@ static void gl2_size_format(GLint* internalFormat)
 #endif
 }
 
+/* Adreno 8xx/X1 Android drivers crash or black-screen in glTexStorage.
+ * Other GPUs keep the existing path. Upstream RetroArch PR 18758. */
+static bool gl2_tex_storage_allowed(void)
+{
+#if defined(HAVE_OPENGLES) && defined(ANDROID)
+   static int allowed = -1;
+
+   if (allowed < 0)
+   {
+      const char *vendor   = (const char*)glGetString(GL_VENDOR);
+      const char *renderer = (const char*)glGetString(GL_RENDERER);
+      const char *model    = NULL;
+      unsigned long model_id = 0;
+
+      allowed = 1;
+      if (vendor && renderer
+            && strstr(vendor, "Qualcomm")
+            && strstr(renderer, "Adreno"))
+      {
+         model = strstr(renderer, "Adreno");
+         while (model && *model && (*model < '0' || *model > '9'))
+            model++;
+         while (model && *model >= '0' && *model <= '9')
+         {
+            model_id = model_id * 10 + (unsigned long)(*model - '0');
+            model++;
+         }
+         if (model_id >= 800 || strstr(renderer, "X1"))
+         {
+            allowed = 0;
+            RARCH_WARN("[GL] Disabling glTexStorage on %s to avoid black-screen regressions on Qualcomm Adreno 8xx/X1 Android drivers.\n",
+                  renderer);
+         }
+      }
+   }
+   return allowed == 1;
+#else
+   return true;
+#endif
+}
+
 /* This function should only be used without mipmaps
    and when data == NULL */
 static void gl2_load_texture_image(GLenum target,
@@ -1186,7 +1227,8 @@ static void gl2_load_texture_image(GLenum target,
    enum gl_capability_enum cap = GL_CAPS_TEX_STORAGE;
 #endif
 
-   if (gl_check_capability(cap) && internalFormat != GL_BGRA_EXT)
+   if (gl2_tex_storage_allowed()
+         && gl_check_capability(cap) && internalFormat != GL_BGRA_EXT)
    {
       gl2_size_format(&internalFormat);
 #ifdef HAVE_OPENGLES2
@@ -3958,7 +4000,11 @@ static bool gl2_resolve_extensions(gl2_t *gl, const char *context_ident, const v
       }
 #endif
    }
+#if defined(HAVE_OPENGLES)
+   else if (gl->version_major < 3)
+#else
    else
+#endif
    {
       const char *ext = (const char*)glGetString(GL_EXTENSIONS);
 
@@ -3975,6 +4021,8 @@ static bool gl2_resolve_extensions(gl2_t *gl, const char *context_ident, const v
          string_list_deinitialize(&list);
       }
    }
+   /* GLES 3 / GL 3 core removed GL_EXTENSIONS. Some Adreno drivers crash
+    * instead of returning NULL, so do not query it here. */
 #endif
 
    return true;
